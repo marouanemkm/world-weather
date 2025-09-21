@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌤️ Weather App — Next.js 15 + Tailwind v4
 
-## Getting Started
+A small weather application built as part of a **technical test**.
+It uses the [Open-Meteo](https://open-meteo.com/) API to display the **current weather**, as well as **hourly forecasts per day** (today + 6 rolling days).
 
-First, run the development server:
+---
+
+## 🚀 Tech Stack
+
+- [Next.js 15 (App Router)](https://nextjs.org/) — modern React framework
+- [TailwindCSS v4](https://tailwindcss.com/) — utility-first styling
+- [TypeScript](https://www.typescriptlang.org/) — static typing
+- [pnpm](https://pnpm.io/) — fast package manager
+
+---
+
+## 📦 Installation & Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install
+
+# Start development server
 pnpm dev
-# or
-bun dev
+
+# Production build
+pnpm build && pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+- **Homepage**
 
-To learn more about Next.js, take a look at the following resources:
+  - Displays 10 major world cities (Paris, London, Tokyo, etc.).
+  - Each city is shown as a **card** with:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    - current temperature
+    - weather condition (label + emoji)
+    - city + country name
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Dynamic city page**
 
-## Deploy on Vercel
+  - A large card showing:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    - hourly forecasts for the selected day
+    - segmented into **Morning / Afternoon / Evening**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  - Navigation through **7 rolling days** (today + next 6 days).
+  - Hours are **fetched dynamically** whenever the selected day changes.
+
+- **Responsive design** with Tailwind v4, clear rendering in **light/dark mode**.
+
+---
+
+## 📂 File Structure
+
+```
+src/
+├── app/
+│   ├── page.tsx                # Homepage (city list)
+│   ├── city/[slug]/page.tsx    # Dynamic city page
+│   └── globals.css             # Tailwind v4 config + global styles
+│
+├── components/
+│   ├── CityCard.tsx            # Card component for homepage
+│   └── CityHourlyCard.tsx      # Hourly weather component (client)
+│
+├── lib/
+│   ├── constants.ts            # List of 10 cities with lat/lon/tz
+│   ├── mappers.ts              # Mapping weathercode → label + emoji
+│   └── types.ts                # Shared TypeScript types
+│
+└── services/
+    └── openMeteo.client.ts     # Open-Meteo fetch functions (day + hourly)
+```
+
+---
+
+## 🔑 Best Practices Applied
+
+- **Separation of concerns**:
+
+  - `services/` for API calls
+  - `components/` for UI components
+  - `lib/` for constants, helpers, and types
+
+- **Strict typing** with TypeScript
+- **Static pages + server fetch** with revalidation (ISR)
+- **Client components** only for interactions (selectors, filters)
+
+---
+
+## 📝 Notes
+
+- Weather data is refreshed every **10 minutes** (`revalidate: 600`).
+- Hours are loaded **on demand**, only when the user switches day.
+- The app is simple and readable, with clear, typed code following Next.js App Router best practices.
+
+---
