@@ -11,8 +11,8 @@ export default async function HomePage() {
       try {
         const w = await fetchTodayWeather(city.lat, city.lon, city.tz);
         return { city, w, error: null as string | null };
-      } catch (e: any) {
-        return { city, w: null, error: e?.message ?? 'Erreur inconnue' };
+      } catch (e: unknown) {
+        return { city, w: null, error: e instanceof Error ? e.message : 'Erreur inconnue' };
       }
     })
   );

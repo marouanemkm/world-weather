@@ -52,8 +52,8 @@ export default function CityHourlyCard({ cityName, lat, lon, tz, dates, initialD
       try {
         const pts = await fetchHourlyForDate(lat, lon, tz, selected);
         if (!cancelled) setHours(pts);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message ?? 'Erreur');
+      } catch (e: unknown) {
+        if (!cancelled) setError(e instanceof Error ? e.message : 'Erreur');
       } finally {
         if (!cancelled) setLoading(false);
       }
